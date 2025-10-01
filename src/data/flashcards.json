@@ -1,0 +1,60 @@
+{
+  "flashcards": [
+    {
+      "id": 1,
+      "question": "Time complexity of Dijkstra's algorithm with Fibonacci heap?",
+      "answer": "O(E + V log V)",
+      "category": "Algorithms",
+      "difficulty": "hard"
+    },
+    {
+      "id": 2,
+      "question": "What does P vs NP ask?",
+      "answer": "Whether polynomial-time verifiable problems are polynomial-time solvable",
+      "category": "Theory of Computing",
+      "difficulty": "hard"
+    },
+    {
+      "id": 3,
+      "question": "CAP theorem guarantees how many properties?",
+      "answer": "Only two out of three",
+      "category": "System Design",
+      "difficulty": "medium"
+    },
+    {
+      "id": 4,
+      "question": "What does a matrix determinant represent?",
+      "answer": "Scaling factor of linear transformation",
+      "category": "Linear Algebra",
+      "difficulty": "medium"
+    },
+    {
+      "id": 5,
+      "question": "Is the Halting Problem decidable?",
+      "answer": "No",
+      "category": "Theory of Computing",
+      "difficulty": "hard"
+    },
+    {
+      "id": 6,
+      "question": "TCP vs UDP?",
+      "answer": "TCP: reliable, ordered. UDP: connectionless, fast",
+      "category": "System Design",
+      "difficulty": "easy"
+    },
+    {
+      "id": 7,
+      "question": "Eigenvector equation?",
+      "answer": "Av = λv",
+      "category": "Linear Algebra",
+      "difficulty": "medium"
+    },
+    {
+      "id": 8,
+      "question": "What does memoization avoid?",
+      "answer": "Redundant computations",
+      "category": "Algorithms",
+      "difficulty": "medium"
+    }
+  ]
+}
