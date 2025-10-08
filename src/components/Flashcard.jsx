@@ -53,5 +53,10 @@ const FlashcardBack = ({ card }) => (
     </div>
   </div>
 );
+{feedback && (
+  <div className={`card-feedback ${feedback}`}>
+    {feedback === 'correct' ? '✅ Correct!' : '❌ Incorrect'}
+  </div>
+)}
 
 export default Flashcard;

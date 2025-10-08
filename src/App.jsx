@@ -10,38 +10,49 @@ const App = () => {
   const [flashcards] = useState(flashcardData.flashcards);
   const [currentCardIndex, setCurrentCardIndex] = useState(0);
   const [isFlipped, setIsFlipped] = useState(false);
-  const [seenCards, setSeenCards] = useState(new Set());
-  const [sessionOrder, setSessionOrder] = useState([]);
+  const [seenCards, setSeenCards] = useState(new Set([0]));
+  const [userGuess, setUserGuess] = useState('');
+  const [feedback, setFeedback] = useState(null); // "correct" or "incorrect"
 
-  useEffect(() => {
-    const initialOrder = [...Array(flashcards.length).keys()];
-    setSessionOrder(initialOrder);
-    setSeenCards(new Set([0]));
-  }, [flashcards.length]);
+  // handle flipping
+  const flipCard = () => {
+    setIsFlipped(!isFlipped);
+    setFeedback(null); // clear feedback when flipping
+  };
 
-  const getRandomCard = () => {
-    let randomIndex;
-    do {
-      randomIndex = Math.floor(Math.random() * flashcards.length);
-    } while (randomIndex === currentCardIndex && flashcards.length > 1);
-    
-    setCurrentCardIndex(randomIndex);
-    setIsFlipped(false);
-    
-    setSeenCards(prev => new Set([...prev, randomIndex]));
-    
-    if (!sessionOrder.includes(randomIndex)) {
-      setSessionOrder(prev => [...prev, randomIndex]);
+  // handle guess submission
+  const handleSubmitGuess = () => {
+    const currentAnswer = flashcards[currentCardIndex].answer.trim().toLowerCase();
+    const guess = userGuess.trim().toLowerCase();
+
+    if (guess === currentAnswer) {
+      setFeedback('correct');
+    } else {
+      setFeedback('incorrect');
     }
   };
 
-  const flipCard = () => {
-    setIsFlipped(!isFlipped);
+  // sequential navigation
+  const handleNext = () => {
+    if (currentCardIndex < flashcards.length - 1) {
+      setCurrentCardIndex(prev => prev + 1);
+      setIsFlipped(false);
+      setFeedback(null);
+      setUserGuess('');
+      setSeenCards(prev => new Set([...prev, currentCardIndex + 1]));
+    }
+  };
+
+  const handlePrevious = () => {
+    if (currentCardIndex > 0) {
+      setCurrentCardIndex(prev => prev - 1);
+      setIsFlipped(false);
+      setFeedback(null);
+      setUserGuess('');
+    }
   };
 
   const currentCard = flashcards[currentCardIndex];
-  const currentSessionPosition = sessionOrder.indexOf(currentCardIndex) + 1;
-  const totalSessionCards = sessionOrder.length;
 
   return (
     <div className="App">
@@ -51,27 +62,46 @@ const App = () => {
         <Flashcard 
           card={currentCard}
           isFlipped={isFlipped}
-          currentPosition={currentSessionPosition}
-          totalSeen={totalSessionCards}
-          totalCards={flashcards.length}
+          feedback={feedback}
           onFlip={flipCard}
         />
+
+        {/* Input box and feedback */}
+        <div className="guess-section">
+          <input
+            type="text"
+            placeholder="Enter your answer..."
+            value={userGuess}
+            onChange={(e) => setUserGuess(e.target.value)}
+            className="guess-input"
+          />
+          <button onClick={handleSubmitGuess} className="submit-btn">Submit</button>
+
+          {feedback && (
+            <p className={`feedback ${feedback}`}>
+              {feedback === 'correct' ? '✅ Correct!' : '❌ Incorrect'}
+            </p>
+          )}
+        </div>
 
         <ActionButtons 
           isFlipped={isFlipped}
           onFlip={flipCard}
-          onNext={getRandomCard}
+          onNext={handleNext}
+          onPrevious={handlePrevious}
+          disableNext={currentCardIndex === flashcards.length - 1}
+          disablePrevious={currentCardIndex === 0}
         />
       </div>
 
       <ProgressSection 
         flashcards={flashcards} 
         seenCards={seenCards}
-        currentSessionPosition={currentSessionPosition}
-        totalSessionCards={totalSessionCards}
+        currentSessionPosition={currentCardIndex + 1}
+        totalSessionCards={flashcards.length}
       />
     </div>
   );
-}
+};
 
 export default App;
